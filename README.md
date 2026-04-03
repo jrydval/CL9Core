@@ -10,7 +10,7 @@ go build -o cl9core .
 
 ## How to run (example)
 
-./cl9core --file ~/Downloads/core/PIC590.OS --port /dev/cu.usbserial-AH06LA82 -echo
+./cl9core --file ~/Downloads/core/PIC590.OS --port /dev/cu.usbserial-AH06LA82 --echo
 
 ## Hint
 

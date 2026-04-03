@@ -16,13 +16,34 @@ func main() {
 	port := flag.String("port", "", "Serial port, e.g. /dev/ttyUSB0 or COM3 (required)")
 	txdelay := flag.Int("txdelay", 10, "Delay between bytes in milliseconds (0–1000)")
 	echo := flag.Bool("echo", false, "Print each sent byte in hex to stdout")
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, `CL9 Core Universal Remote Firmware Loader
+
+Sends a binary firmware file to a CL9 device over a serial port.
+The data is XOR-encoded in 256-byte blocks before transmission.
+
+Usage:
+  cl9core --port <port> --file <file> [options]
+
+Required:
+  --port string    Serial port to use (e.g. /dev/ttyUSB0 or COM3)
+  --file string    Firmware file to send
+
+Options:
+  --baud int       Baud rate, 9600 or 19200 (default 19200)
+  --txdelay int    Delay between bytes in milliseconds, 0–1000 (default 10)
+  --echo           Print each sent (XOR-encoded) byte in hex to stdout
+
+Example:
+  cl9core --port /dev/ttyUSB0 --file firmware.bin --baud 19200 --echo
+
+`)
+	}
 	flag.Parse()
 
-	if *file == "" {
-		log.Fatal("--file is required")
-	}
-	if *port == "" {
-		log.Fatal("--port is required")
+	if *file == "" || *port == "" {
+		flag.Usage()
+		os.Exit(1)
 	}
 	if *baud != 9600 && *baud != 19200 {
 		log.Fatal("--baud must be 9600 or 19200")
